@@ -28,7 +28,7 @@ async function onChange(input) {
     if (exact_matches.length == 1) {
         command = exact_matches[0];
         args = input.substr(command.name.length).trim();
-
+   
         suggestions = [{
             name: command.name,
             desc: command.desc
@@ -79,9 +79,16 @@ async function onEnter(input) {
             const allowed_args = (await command.args()).map(arg => arg.content);
             if (allowed_args.includes(args)) {
                 await command.run(args);
+                return;
             } else {
                 await command.run();
+                return;
             }
         };
+    }
+    if(command_bar.selected_index == -1)
+    {
+        command_bar.selectItem(0);
+        await onEnter(command_bar.input_el.value);
     }
 }
