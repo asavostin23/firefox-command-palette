@@ -102,6 +102,17 @@ commands = [
         args: () => []
     },
     {
+        name: "duplicate this tab",
+        desc: "",
+        run: async () => {
+            const tabs = await browser.tabs.query({active: true, currentWindow: true});
+            tabs.map(tab => {
+                browser.tabs.duplicate(tab.id)
+            });
+        },
+        args: () => []
+    },
+    {
         name: "open new window",
         desc: "",
         run: () => {browser.windows.create({})},
@@ -240,6 +251,16 @@ commands = [
                 tabId: active_tab.id,
                 type: "popup"
             });
+        },
+        args: () => []
+    },
+    {
+        name: "restore closed tab",
+        desc: "",
+        run: async () => {
+            await browser.sessions.restore(
+                (await browser.sessions.getRecentlyClosed({maxResults: 1}))[0].tab.sessionId
+            );
         },
         args: () => []
     },
